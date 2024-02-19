@@ -1,13 +1,14 @@
 package com.springboot.blog.controller;
 
 import com.springboot.blog.dto.PostDto;
+import com.springboot.blog.dto.PostPagination;
 import com.springboot.blog.service.PostService;
 import com.springboot.blog.service.impl.PostServiceImpl;
+import com.springboot.blog.utils.AppConstants;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("blog/post")
@@ -22,8 +23,13 @@ public class PostController {
         return new ResponseEntity<>(postService.createPost(postDto), HttpStatus.CREATED);
     }
     @GetMapping
-    ResponseEntity<List<PostDto>> getAllPosts(){
-        return new ResponseEntity<>(postService.getAllPosts(), HttpStatus.OK);
+    ResponseEntity<PostPagination> getAllPosts(
+            @RequestParam(name = "pageNo" , defaultValue = AppConstants.PAGE_NUMBER,required = false) int pageNo,
+            @RequestParam(name = "pageSize" ,defaultValue = AppConstants.PAGE_SIZE ,required = false) int pageSize,
+            @RequestParam(name = "sortBy" ,defaultValue = AppConstants.SORT_BY ,required = false) String sortBy,
+            @RequestParam(name = "sortDir" ,defaultValue = AppConstants.SORT_DIRECTION ,required = false) String sortDir
+    ){
+        return new ResponseEntity<>(postService.getAllPosts(pageNo,pageSize,sortBy,sortDir), HttpStatus.OK);
     }
     @GetMapping("/{id}")
     ResponseEntity<PostDto> getPostById(@PathVariable(name = "id") Long postId){
