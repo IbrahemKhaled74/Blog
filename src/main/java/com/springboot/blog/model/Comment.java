@@ -10,17 +10,19 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Entity
-public class Post {
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String title;
-    private String description;
-    private String content;
-    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL ,orphanRemoval = true)
-    Set<Comment> comments=new HashSet<>();
+    private String name;
+    private String email;
+    private String body;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id")
+    private Post post;
 }
+
