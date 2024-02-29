@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("blog/post")
+@RequestMapping("blog/posts")
 public class PostController {
     private final PostService postService;
 
@@ -32,18 +32,18 @@ public class PostController {
         return new ResponseEntity<>(postService.getAllPosts(pageNo,pageSize,sortBy,sortDir), HttpStatus.OK);
     }
     @GetMapping("/{id}")
-    ResponseEntity<PostDto> getPostById(@PathVariable(name = "id") Long postId){
+    ResponseEntity<PostDto> getPostById(@PathVariable(name = "id") long postId){
         return ResponseEntity.ok(postService.getPostById(postId));
     }
     @PutMapping("/{id}")
     ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto,
-                                       @PathVariable(name = "id") Long postId){
+                                       @PathVariable(name = "id") long postId){
         return ResponseEntity.ok(postService.updatePost(postDto, postId));
     }
     @DeleteMapping("/{id}")
-    ResponseEntity deletePost(@PathVariable(name = "id") Long postId){
+    ResponseEntity<String> deletePost(@PathVariable(name = "id") Long postId){
         postService.deletePostById( postId);
-        return new ResponseEntity<>("Comment Deleted Successfully",HttpStatus.OK);
+        return new ResponseEntity<>("Post Deleted Successfully",HttpStatus.OK);
     }
 
 

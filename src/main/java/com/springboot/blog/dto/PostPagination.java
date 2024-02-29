@@ -14,7 +14,7 @@ public class PostPagination {
     private List<PostDto>content;
     private int pageNumber;
     private int pageSize;
-    private int totalElements;
+    private long totalElements;
     private int totalPage;
     private boolean isLast;
 }
