@@ -7,6 +7,7 @@ import com.springboot.blog.model.Role;
 import com.springboot.blog.model.UserDetails;
 import com.springboot.blog.repository.RoleRepo;
 import com.springboot.blog.repository.UserRepo;
+import com.springboot.blog.security.JwtTokenProvider;
 import com.springboot.blog.service.AuthService;
 import com.springboot.blog.utils.RoleName;
 import org.springframework.http.HttpStatus;
@@ -26,12 +27,14 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepo userRepo;
     private final RoleRepo roleRepo;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    public AuthServiceImpl(AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, UserRepo userRepo, RoleRepo roleRepo) {
+    public AuthServiceImpl(AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, UserRepo userRepo, RoleRepo roleRepo, JwtTokenProvider jwtTokenProvider) {
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
         this.userRepo = userRepo;
         this.roleRepo = roleRepo;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @Override
@@ -41,7 +44,7 @@ public class AuthServiceImpl implements AuthService {
         );
         SecurityContextHolder.getContext().setAuthentication(authenticate);
 
-        return "Login Successfully";
+        return jwtTokenProvider.generateToken(authenticate);
     }
 
     @Override
@@ -52,14 +55,15 @@ public class AuthServiceImpl implements AuthService {
         if (userRepo.existsByEmail(registerDto.getEmail())){
             throw  new BlogException(HttpStatus.BAD_REQUEST,"This email already exist");
         }
-        Set<Role>roleNames=new HashSet<>();
-        roleNames.add(roleRepo.findByRole(RoleName.USER).get());
+        Set<Role> roles = new HashSet<>();
+        Role userRole = roleRepo.findByRole(RoleName.ROLE_USER).get();
+        roles.add(userRole);
         UserDetails user = UserDetails.builder()
                 .username(registerDto.getUsername())
                 .email(registerDto.getEmail())
                 .password(passwordEncoder.encode(registerDto.getPassword()))
                 .name(registerDto.getName())
-                .role(roleNames)
+                .role(roles)
                 .build();
         userRepo.save(user);
 

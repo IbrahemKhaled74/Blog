@@ -21,7 +21,9 @@ public class CustomUserDetailsService implements UserDetailsService {
     //save user in data base
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
-        com.springboot.blog.model.UserDetails user = userRepo.findByEmailOrUsername(usernameOrEmail, usernameOrEmail).orElseThrow(() -> new UsernameNotFoundException("UserName Not Found "));
+        com.springboot.blog.model.UserDetails user = userRepo.findByEmailOrUsername(usernameOrEmail, usernameOrEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("UserName Not Found "));
+
         Set<GrantedAuthority> authorities= user.getRole().stream()
                 .map((role -> new SimpleGrantedAuthority(role.getRole().name()))).collect(Collectors.toSet());
 
