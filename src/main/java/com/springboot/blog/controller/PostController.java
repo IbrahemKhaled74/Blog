@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("blog/posts")
@@ -37,6 +39,10 @@ public class PostController {
     @GetMapping("/{id}")
     ResponseEntity<PostDto> getPostById(@PathVariable(name = "id") long postId){
         return ResponseEntity.ok(postService.getPostById(postId));
+    }
+    @GetMapping("/category/{id}")
+    ResponseEntity<List<PostDto>> getPostsByCategory(@PathVariable(name = "id") long categoryId){
+        return ResponseEntity.ok(postService.getPostsByCategory(categoryId));
     }
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
