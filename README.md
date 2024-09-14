@@ -195,3 +195,8 @@ Contributions are welcome! To contribute:
 4. Push the branch: `git push origin feature-branch`.
 5. Open a pull request for review.
 
+![Spring Boot](https://img.icons8.com/color/48/000000/spring-logo.png)
+![Java](https://img.icons8.com/color/50/000000/java-coffee-cup-logo.png)
+![SQL](https://img.icons8.com/color/50/000000/database.png)
+
+
